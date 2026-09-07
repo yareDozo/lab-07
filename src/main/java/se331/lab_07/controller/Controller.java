@@ -88,15 +88,19 @@ public class Controller {
 
     @GetMapping("/events")
     public ResponseEntity<List<Event>> getEventLists(@RequestParam(value = "_limit",
-    required = false)Integer perPage
-    ,@RequestParam(value = "_page",required = false)Integer page) {
-        perPage = perPage == null?eventsList.size() : perPage;
-        page = page == null?1:page;
+                                                             required = false) Integer perPage
+            , @RequestParam(value = "_page", required = false) Integer page) {
+        perPage = perPage == null ? eventsList.size() : perPage;
+        page = page == null ? 1 : page;
         Integer firstIndex = (page - 1) * perPage;
         List<Event> output = new ArrayList<>();
-        for (int i = firstIndex; i < firstIndex + perPage; i++) {
-            output.add(eventsList.get(i));
+        try {
+            for (int i = firstIndex; i < firstIndex + perPage; i++) {
+                output.add(eventsList.get(i));
+            }
+            return ResponseEntity.ok(output);
+        } catch (IndexOutOfBoundsException ex) {
+            return ResponseEntity.ok(output);
         }
-        return ResponseEntity.ok(output);
     }
 }
